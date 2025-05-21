@@ -1,17 +1,12 @@
-name: tests
+name: Deploy to FTP
 
 on:
   push:
     branches:
-      - dev
-      - main
-  pull_request:
-    branches:
-      - dev
       - main
 
 jobs:
-  ci:
+  ftp-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -46,5 +41,15 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Tests
+      - name: Tests PhpUnit
         run: ./vendor/bin/phpunit
+
+      - name: Upload to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: plt.pro.vn
+          port: 21
+          username: test_plt_pro_vn@test.plt.pro.vn
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: ./
