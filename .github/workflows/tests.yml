@@ -18,6 +18,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check outgoing IP
+        run: |
+          echo "GitHub Actions IP:"
+          curl -s https://api.ipify.org
+          # or alternatively
+          # curl -s https://checkip.amazonaws.com
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -46,12 +53,5 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Check outgoing IP
-        run: |
-          echo "GitHub Actions IP:"
-          curl -s https://api.ipify.org
-          # or alternatively
-          # curl -s https://checkip.amazonaws.com
-
       - name: Tests
-        run: ./vendor/bin/phpunit
+        run: php artisan test
